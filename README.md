@@ -1,4 +1,4 @@
-# 🏪 Smart Inventory Management System
+# Smart Inventory Management System
 
 A modern, full-stack inventory management solution featuring AI-powered insights, real-time analytics, and role-based access control for both administrators and customers.
 
@@ -9,16 +9,16 @@ A modern, full-stack inventory management solution featuring AI-powered insights
 
 ---
 
-## ✨ Features
+## Features
 
-### 📊 Admin Dashboard
+### Admin Dashboard
 - **Real-time Analytics** – Visual charts and statistics powered by Recharts
 - **Inventory Management** – Complete CRUD operations for products
 - **Order Management** – Track and manage customer orders
 - **AI Insights** – Intelligent demand forecasting and inventory recommendations
 - **Barcode Scanner** – Quick product lookup using device camera
 
-### 🛒 Customer Portal
+### Customer Portal
 - **Online Shop** – Browse and order products
 - **Order Tracking** – View order history and status
 - **Secure Authentication** – JWT-based login system
@@ -30,7 +30,7 @@ A modern, full-stack inventory management solution featuring AI-powered insights
 
 ---
 
-##  Tech Stack
+## Tech Stack
 
 | Layer      | Technology                                         |
 |------------|---------------------------------------------------|
@@ -41,7 +41,7 @@ A modern, full-stack inventory management solution featuring AI-powered insights
 
 ---
 
-##  Project Structure
+## Project Structure
 
 ```
 smart-inventory/
@@ -90,7 +90,7 @@ smart-inventory/
 
 ---
 
-##  Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -164,7 +164,7 @@ npm run dev
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 ### Authentication
 | Method | Endpoint           | Description        |
@@ -194,7 +194,7 @@ npm run dev
 
 ---
 
-## 🔧 Available Scripts
+## Available Scripts
 
 ### Server
 ```bash
@@ -212,7 +212,7 @@ npm run lint    # Run ESLint
 
 ---
 
-##  Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
@@ -222,13 +222,13 @@ npm run lint    # Run ESLint
 
 ---
 
-##  License
+## License
 
 This project is licensed under the ISC License.
 
 ---
 
-##  Support
+## Support
 
 For support, please open an issue in the GitHub repository.
 
