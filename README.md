@@ -34,9 +34,9 @@ A modern, full-stack inventory management solution featuring AI-powered insights
 
 | Layer      | Technology                                         |
 |------------|---------------------------------------------------|
-| **Frontend** | React 19, Vite, React Router, Recharts          |
+| **Frontend** | React 19                                        |
 | **Backend**  | Node.js, Express 5                                |
-| **Database** | MongoDB with Mongoose ODM                         |
+| **Database** | MongoDB                                          |
 | **Auth**     | JWT                                              |
 
 ---
@@ -220,13 +220,6 @@ npm run lint    # Run ESLint
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
----
-
-## License
-
-This project is licensed under the ISC License.
-
----
 
 ## Support
 
