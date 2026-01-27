@@ -2,10 +2,33 @@
 
 A modern, full-stack inventory management solution featuring AI-powered insights, real-time analytics, and role-based access control for both administrators and customers.
 
-![Node.js](https://img.shields.io/badge/Node.js-v18+-green?logo=node.js)
-![React](https://img.shields.io/badge/React-19-blue?logo=react)
-![MongoDB](https://img.shields.io/badge/MongoDB-Database-green?logo=mongodb)
-![License](https://img.shields.io/badge/License-ISC-yellow)
+---
+
+## Technologies Used
+
+| Layer        | Technology                          |
+|--------------|-------------------------------------|
+| **Frontend** | React 19                            |
+| **Backend**  | Node.js, Express 5                  |
+| **Database** | MongoDB                             |
+| **Auth**     | JWT                                 |
+
+---
+
+## Student Details
+
+| Field            | Details                              |
+|------------------|--------------------------------------|
+| **Student Name** | Abhin K R                            |
+| **Contact**      | 8590571389                           |
+
+---
+
+## Guide
+
+| Field            | Details                              |
+|------------------|--------------------------------------|
+| **Guide Name**   | Ms. Akshara Sasidharan               |
 
 ---
 
@@ -30,17 +53,6 @@ A modern, full-stack inventory management solution featuring AI-powered insights
 
 ---
 
-## Tech Stack
-
-| Layer      | Technology                                         |
-|------------|---------------------------------------------------|
-| **Frontend** | React 19                                        |
-| **Backend**  | Node.js, Express 5                                |
-| **Database** | MongoDB                                          |
-| **Auth**     | JWT                                              |
-
----
-
 ## Project Structure
 
 ```
@@ -48,18 +60,7 @@ smart-inventory/
 ├── client/                    # React Frontend
 │   ├── src/
 │   │   ├── components/        # Reusable UI components
-│   │   │   ├── BarcodeScanner.jsx
-│   │   │   ├── CustomerLayout.jsx
-│   │   │   ├── Layout.jsx
-│   │   │   └── Sidebar.jsx
 │   │   ├── pages/             # Application pages
-│   │   │   ├── AIInsights.jsx
-│   │   │   ├── AdminOrders.jsx
-│   │   │   ├── CustomerOrders.jsx
-│   │   │   ├── Dashboard.jsx
-│   │   │   ├── Inventory.jsx
-│   │   │   ├── Login.jsx
-│   │   │   └── Shop.jsx
 │   │   ├── context/           # React Context providers
 │   │   ├── App.jsx
 │   │   └── main.jsx
@@ -70,16 +71,7 @@ smart-inventory/
 │   ├── controllers/           # Route handlers
 │   ├── middleware/            # Auth & validation middleware
 │   ├── models/                # Mongoose schemas
-│   │   ├── Order.js
-│   │   ├── Product.js
-│   │   ├── PurchaseOrder.js
-│   │   ├── Supplier.js
-│   │   └── User.js
 │   ├── routes/                # API routes
-│   │   ├── aiRoutes.js
-│   │   ├── authRoutes.js
-│   │   ├── orderRoutes.js
-│   │   └── productRoutes.js
 │   ├── utils/                 # Helper functions
 │   ├── server.js              # Entry point
 │   └── package.json
@@ -127,19 +119,10 @@ smart-inventory/
    JWT_SECRET=your_secure_secret_key_here
    ```
 
-5. **Seed the database** (optional)
-   ```bash
-   cd server
-   node seed.js
-   ```
-
 ### Running the Application
 
 #### Option 1: Quick Start (Windows)
-Double-click `run_app.bat` in the project root. This will:
-- Start the backend server
-- Start the frontend development server
-- Open the application in your browser
+Double-click `run_app.bat` in the project root.
 
 #### Option 2: Manual Start
 
@@ -168,7 +151,7 @@ npm run dev
 
 ### Authentication
 | Method | Endpoint           | Description        |
-|--------|-------------------|--------------------|
+|--------|-------------------|--------------------
 | POST   | `/api/auth/login`  | User login         |
 | POST   | `/api/auth/register` | User registration |
 
@@ -182,51 +165,13 @@ npm run dev
 
 ### Orders
 | Method | Endpoint            | Description        |
-|--------|--------------------|--------------------|
+|--------|--------------------|--------------------
 | GET    | `/api/orders`       | Get all orders     |
 | POST   | `/api/orders`       | Create an order    |
 | PUT    | `/api/orders/:id`   | Update order status|
 
-### AI Insights
-| Method | Endpoint         | Description                |
-|--------|-----------------|----------------------------|
-| GET    | `/api/ai`        | Get AI-powered analytics   |
-
----
-
-## Available Scripts
-
-### Server
-```bash
-npm start      # Start production server
-npm run dev    # Start with hot-reload (nodemon)
-```
-
-### Client
-```bash
-npm run dev     # Start development server
-npm run build   # Build for production
-npm run preview # Preview production build
-npm run lint    # Run ESLint
-```
-
----
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-
-## Support
-
-For support, please open an issue in the GitHub repository.
-
 ---
 
 <p align="center">
-  Made for efficient inventory management
+  Smart Inventory Management System © 2026
 </p>
