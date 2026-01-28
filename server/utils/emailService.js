@@ -28,7 +28,7 @@ const sendLowStockAlert = async (product) => {
 
     try {
         const statusLabel = product.quantity === 0 ? 'OUT OF STOCK' :
-            product.quantity < (product.reorderLevel * 0.5) ? 'CRITICAL' : 'LOW STOCK';
+            product.quantity < (product.reorderLevel * 0.25) ? 'CRITICAL' : 'LOW STOCK';
 
         const mailOptions = {
             from: `"Smart Inventory" <${process.env.SMTP_USER}>`,
@@ -87,7 +87,8 @@ const sendLowStockAlert = async (product) => {
  * @param {Object} product - Product to check
  */
 const checkAndAlertLowStock = async (product) => {
-    if (product.quantity < product.reorderLevel) {
+    // Alert when stock is at or below reorder level (industry standard threshold)
+    if (product.quantity <= product.reorderLevel) {
         await sendLowStockAlert(product);
     }
 };

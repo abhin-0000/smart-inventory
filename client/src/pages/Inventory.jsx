@@ -28,7 +28,7 @@ const Inventory = () => {
         price: '',
         quantity: '',
         unit: 'pcs',
-        reorderLevel: '5'
+        reorderLevel: '10'
     });
 
     useEffect(() => {
@@ -52,11 +52,15 @@ const Inventory = () => {
         return cats.sort();
     }, [products]);
 
-    // Get stock status for a product
+    // Get stock status for a product - Fixed quantity thresholds
+    // Out of Stock: quantity = 0
+    // Critical: quantity < 5 (urgent reorder needed)
+    // Low Stock: quantity < 10 (needs attention)
+    // In Stock: quantity >= 10 (adequate stock)
     const getStockStatus = (product) => {
         if (product.quantity === 0) return 'out';
-        if (product.quantity < (product.reorderLevel * 0.5)) return 'critical';
-        if (product.quantity < product.reorderLevel) return 'low';
+        if (product.quantity < 5) return 'critical';
+        if (product.quantity < 10) return 'low';
         return 'in';
     };
 
@@ -124,7 +128,7 @@ const Inventory = () => {
             price: '',
             quantity: '',
             unit: 'pcs',
-            reorderLevel: '5'
+            reorderLevel: '10'
         });
         setEditingProduct(null);
     };
@@ -375,9 +379,9 @@ const Inventory = () => {
                                 <td>
                                     {product.quantity === 0 ? (
                                         <span className="badge badge-danger">Out of Stock</span>
-                                    ) : product.quantity < (product.reorderLevel * 0.5) ? (
+                                    ) : product.quantity < 5 ? (
                                         <span className="badge badge-critical">Critical</span>
-                                    ) : product.quantity < product.reorderLevel ? (
+                                    ) : product.quantity < 10 ? (
                                         <span className="badge badge-warning">Low Stock</span>
                                     ) : (
                                         <span className="badge badge-success">In Stock</span>

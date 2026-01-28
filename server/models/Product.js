@@ -10,7 +10,7 @@ const productSchema = new mongoose.Schema({
     quantity: { type: Number, required: true, default: 0 },
     unit: { type: String, required: true }, // e.g., kg, pcs, liters
     supplier: { type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' },
-    reorderLevel: { type: Number, default: 10 }, // Threshold for alert
+    reorderLevel: { type: Number, default: 10 }, // Industry standard threshold - products at or below this level trigger low stock alerts
     leadTime: { type: Number, default: 1 }, // Days to deliver
 }, { timestamps: true });
 
