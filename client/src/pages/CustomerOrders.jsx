@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ClipboardList, Package, CheckCircle, Clock, Truck, Home } from 'lucide-react';
+import { ClipboardList, Package, CheckCircle, Clock, Truck, Home, MapPin } from 'lucide-react';
 
 const CustomerOrders = () => {
     const [orders, setOrders] = useState([]);
@@ -75,7 +75,7 @@ const CustomerOrders = () => {
                                     <p className="font-mono text-sm font-medium">{order.orderNumber}</p>
                                     <p className="text-xs text-muted">{formatDate(order.createdAt)}</p>
                                 </div>
-                                <span className="text-lg font-semibold">${order.totalAmount.toFixed(2)}</span>
+                                <span className="text-lg font-semibold">₹{order.totalAmount.toFixed(2)}</span>
                             </div>
 
                             {/* Order Tracking Timeline */}
@@ -114,12 +114,28 @@ const CustomerOrders = () => {
                                             </div>
                                             <div>
                                                 <p className="text-sm font-medium">{item.name}</p>
-                                                <p className="text-xs text-muted">Qty: {item.quantity} × ${item.price}</p>
+                                                <p className="text-xs text-muted">Qty: {item.quantity} × ₹{item.price}</p>
                                             </div>
                                         </div>
-                                        <span className="text-sm font-medium">${(item.quantity * item.price).toFixed(2)}</span>
+                                        <span className="text-sm font-medium">₹{(item.quantity * item.price).toFixed(2)}</span>
                                     </div>
                                 ))}
+                            </div>
+
+                            {/* Delivery Address */}
+                            <div className="border-t pt-4 mt-2">
+                                <div className="flex items-start gap-2">
+                                    <MapPin size={15} style={{ color: 'var(--primary)', marginTop: 2, flexShrink: 0 }} />
+                                    <div>
+                                        <p className="text-sm font-medium mb-1">Delivery Address</p>
+                                        <p className="text-xs text-muted" style={{ lineHeight: 1.6 }}>
+                                            {order.shippingAddress
+                                                ? order.shippingAddress
+                                                : <span style={{ fontStyle: 'italic' }}>No address provided</span>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     ))}

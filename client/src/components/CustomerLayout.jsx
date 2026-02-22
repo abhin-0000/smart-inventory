@@ -9,13 +9,16 @@ const CustomerLayout = () => {
 
     return (
         <div className="layout">
-            <div className="sidebar">
+            <div
+                className="sidebar"
+                style={{ height: '100vh', position: 'sticky', top: 0, overflowY: 'auto' }}
+            >
                 <div className="px-4 mb-8">
                     <h1 className="text-lg text-primary">SmartInv</h1>
-                    <p className="text-xs text-muted">Shop</p>
+                    <p className="text-xs text-muted">Customer Portal</p>
                 </div>
 
-                <nav className="flex-1">
+                <nav style={{ flex: 1 }}>
                     <NavLink
                         to="/shop"
                         className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
@@ -32,9 +35,13 @@ const CustomerLayout = () => {
                     </NavLink>
                 </nav>
 
-                <div className="border-t pt-4 mt-auto">
+                {/* User info + Logout — always pinned to bottom */}
+                <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '1rem', marginTop: 'auto' }}>
                     <div className="flex items-center gap-3 px-4 mb-4">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 text-sm font-medium">
+                        <div
+                            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium"
+                            style={{ background: '#dbeafe', color: '#2563eb' }}
+                        >
                             {user?.name?.charAt(0).toUpperCase()}
                         </div>
                         <div>
@@ -42,12 +49,17 @@ const CustomerLayout = () => {
                             <p className="text-xs text-muted">Customer</p>
                         </div>
                     </div>
-                    <button onClick={logout} className="nav-item w-full text-danger">
+                    <button
+                        onClick={logout}
+                        className="nav-item w-full text-danger"
+                        style={{ background: 'transparent' }}
+                    >
                         <LogOut size={18} />
                         <span>Logout</span>
                     </button>
                 </div>
             </div>
+
             <main className="main-content">
                 <Outlet />
             </main>

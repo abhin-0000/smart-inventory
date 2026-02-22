@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ClipboardList, Package, CheckCircle, Truck, XCircle, Download } from 'lucide-react';
+import { ClipboardList, Package, CheckCircle, Truck, XCircle, Download, MapPin } from 'lucide-react';
 
 const AdminOrders = () => {
     const [orders, setOrders] = useState([]);
@@ -50,9 +50,9 @@ const AdminOrders = () => {
         });
     };
 
-    // Export orders to CSV
+    // Export orders to CSV (includes shipping address)
     const exportToCSV = () => {
-        const headers = ['Order Number', 'Customer', 'Email', 'Items', 'Total', 'Status', 'Date'];
+        const headers = ['Order Number', 'Customer', 'Email', 'Items', 'Total', 'Status', 'Shipping Address', 'Date'];
 
         const csvContent = [
             headers.join(','),
@@ -63,6 +63,7 @@ const AdminOrders = () => {
                 o.items.length,
                 o.totalAmount.toFixed(2),
                 o.status,
+                `"${o.shippingAddress || 'N/A'}"`,
                 formatDate(o.createdAt)
             ].join(','))
         ].join('\n');
@@ -104,6 +105,7 @@ const AdminOrders = () => {
                                 <th>Items</th>
                                 <th>Total</th>
                                 <th>Status</th>
+                                <th>Shipping Address</th>
                                 <th>Date</th>
                                 <th>Actions</th>
                             </tr>
@@ -124,11 +126,34 @@ const AdminOrders = () => {
                                             {order.items.map(i => i.name).join(', ').substring(0, 30)}...
                                         </p>
                                     </td>
-                                    <td className="font-semibold">${order.totalAmount.toFixed(2)}</td>
+                                    <td className="font-semibold">₹{order.totalAmount.toFixed(2)}</td>
                                     <td>
                                         <span className={`badge ${getStatusColor(order.status)}`}>
                                             {order.status}
                                         </span>
+                                    </td>
+                                    <td>
+                                        {order.shippingAddress ? (
+                                            <div className="flex items-start gap-1" style={{ maxWidth: 200 }}>
+                                                <MapPin size={13} style={{ color: 'var(--primary)', marginTop: 2, flexShrink: 0 }} />
+                                                <span
+                                                    className="text-xs text-muted"
+                                                    style={{
+                                                        display: '-webkit-box',
+                                                        WebkitLineClamp: 2,
+                                                        WebkitBoxOrient: 'vertical',
+                                                        overflow: 'hidden',
+                                                        lineHeight: 1.5,
+                                                        cursor: 'help'
+                                                    }}
+                                                    title={order.shippingAddress}
+                                                >
+                                                    {order.shippingAddress}
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            <span className="text-xs text-muted" style={{ fontStyle: 'italic' }}>—</span>
+                                        )}
                                     </td>
                                     <td className="text-sm text-muted">{formatDate(order.createdAt)}</td>
                                     <td>
