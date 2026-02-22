@@ -77,15 +77,16 @@ const getReorderPredictions = async (req, res) => {
 
             const totalSold = monthlySales.reduce((a, b) => a + b, 0);
 
-            // ── WMA: weighted-average monthly demand (most recent month = highest weight)
+            // ── Demand Calculations ──────────────────────────────────────
+            // 1. Observed Historical Average (Direct data)
+            const historicalDailyDemand = totalSold / TOTAL_WINDOW_DAYS;
+
+            // 2. WMA Predicted Demand (Weighted forecasting)
             const predictedMonthlyDemand = weightedMovingAverage(monthlySales);
+            const AVG_DAYS_PER_MONTH = 30;
+            const predictedDailyDemand = predictedMonthlyDemand / AVG_DAYS_PER_MONTH;
 
-            // ── Avg Daily Demand
-            // Use avg days/month across our 4-month window (120 days / 4 months = 30)
-            const AVG_DAYS_PER_MONTH = TOTAL_WINDOW_DAYS / MONTHS.length; // 30
-            const avgDailyDemand = predictedMonthlyDemand / AVG_DAYS_PER_MONTH;
-
-            // ── Std dev for safety stock
+            // Monthly std dev → daily std dev (for safety stock)
             const monthlyStdDev = stdDev(monthlySales);
             const dailyStdDev = monthlyStdDev / AVG_DAYS_PER_MONTH;
 
@@ -95,43 +96,59 @@ const getReorderPredictions = async (req, res) => {
             const safetyStock = Math.ceil(Z * dailyStdDev * Math.sqrt(leadTimeDays));
 
             // ── Days Until Stockout ──────────────────────────────────────
-            // qty=0  → already stockout → 0
-            // no demand data → null (displayed as "—")
-            // normal → floor(qty / avgDailyDemand), capped at 999 to avoid noise
+            // Based on historical daily demand for the most accurate observation
             let daysUntilStockout;
             if (product.quantity === 0) {
                 daysUntilStockout = 0;
-            } else if (avgDailyDemand <= 0) {
+            } else if (historicalDailyDemand <= 0) {
                 daysUntilStockout = null;
             } else {
-                daysUntilStockout = Math.min(999, Math.floor(product.quantity / avgDailyDemand));
+                daysUntilStockout = Math.min(999, Math.floor(product.quantity / historicalDailyDemand));
+            }
+
+
+            // ── Urgency (computed first so reorder qty can scale with it)
+            // Mirrors Inventory.jsx stock thresholds exactly:
+            //   qty = 0 or < 5  → critical
+            //   qty < 10        → low
+            //   qty >= 10       → ok (unless demand signals escalate it)
+            let urgency = 'ok';
+            if (product.quantity === 0 || product.quantity < 5) {
+                urgency = 'critical';
+            } else if (product.quantity < 10) {
+                urgency = 'low';
+            }
+            // Demand-based escalation
+            if (urgency !== 'critical' && daysUntilStockout !== null && daysUntilStockout <= leadTimeDays) {
+                urgency = 'critical';
+            } else if (urgency === 'ok' && daysUntilStockout !== null && daysUntilStockout <= leadTimeDays * 2) {
+                urgency = 'low';
             }
 
             // ── Recommended Reorder Quantity
-            const demandDuringLeadTime = Math.ceil(avgDailyDemand * leadTimeDays);
+            // Base target: enough to cover lead time demand + safety stock, min = 2× reorderLevel
+            const demandDuringLeadTime = Math.ceil(predictedDailyDemand * leadTimeDays);
+            const baseTarget = Math.max(product.reorderLevel * 2, demandDuringLeadTime + safetyStock);
+
             let recommendedReorderQty;
-
             if (totalSold === 0) {
-                // No purchase history → fall back to the product's reorder level
-                recommendedReorderQty = product.reorderLevel;
+                // No purchase history — scale by urgency using the reorder level
+                if (urgency === 'critical') {
+                    recommendedReorderQty = product.reorderLevel * 3;
+                } else if (urgency === 'low') {
+                    recommendedReorderQty = product.reorderLevel * 2;
+                } else {
+                    recommendedReorderQty = 0; // In Stock — no reorder needed
+                }
             } else {
-                // Cover demand during lead time + safety stock, at minimum = reorderLevel
-                recommendedReorderQty = Math.max(
-                    product.reorderLevel,
-                    demandDuringLeadTime + safetyStock
-                );
-            }
-
-            // ── Urgency
-            let urgency = 'ok';
-            if (product.quantity === 0) {
-                urgency = 'critical';
-            } else if (daysUntilStockout !== null && daysUntilStockout <= leadTimeDays) {
-                urgency = 'critical'; // will run out before next delivery
-            } else if (product.quantity <= product.reorderLevel) {
-                urgency = 'low';
-            } else if (daysUntilStockout !== null && daysUntilStockout <= leadTimeDays * 2) {
-                urgency = 'low';
+                // With real demand data — scale by urgency
+                if (urgency === 'critical') {
+                    recommendedReorderQty = Math.ceil(baseTarget * 3);
+                } else if (urgency === 'low') {
+                    recommendedReorderQty = Math.ceil(baseTarget * 2);
+                } else {
+                    recommendedReorderQty = 0; // In Stock — no reorder needed
+                }
             }
 
             predictions.push({
@@ -143,7 +160,8 @@ const getReorderPredictions = async (req, res) => {
                 unit: product.unit,
                 reorderLevel: product.reorderLevel,
                 leadTimeDays,
-                avgDailyDemand: parseFloat(avgDailyDemand.toFixed(2)),
+                avgDailyDemand: parseFloat(historicalDailyDemand.toFixed(2)),
+                predictedDailyDemand: parseFloat(predictedDailyDemand.toFixed(2)),
                 predictedMonthlyDemand: parseFloat(predictedMonthlyDemand.toFixed(1)),
                 safetyStock,
                 recommendedReorderQty,
@@ -154,6 +172,7 @@ const getReorderPredictions = async (req, res) => {
                 hasRealData: totalSold > 0
             });
         }
+
 
         // Sort: critical → low → ok; within same urgency by daysUntilStockout asc
         const urgencyOrder = { critical: 0, low: 1, ok: 2 };

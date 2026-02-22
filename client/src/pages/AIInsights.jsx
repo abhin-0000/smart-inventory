@@ -223,7 +223,7 @@ const AIInsights = () => {
                             <th style={{ textAlign: 'left', padding: '12px 16px', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', background: '#fafbfc' }}>Product</th>
                             <th style={{ textAlign: 'center', padding: '12px 8px', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', background: '#fafbfc' }}>Current Stock</th>
                             <th style={{ textAlign: 'center', padding: '12px 8px', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', background: '#fafbfc' }}>Avg Daily Demand</th>
-                            <th style={{ textAlign: 'center', padding: '12px 8px', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', background: '#fafbfc' }}>Days Until Stockout</th>
+
 
                             <th style={{ textAlign: 'center', padding: '12px 8px', fontSize: 11, fontWeight: 600, color: 'var(--primary)', textTransform: 'uppercase', background: '#fafbfc' }}>Reorder Qty ✦</th>
                             <th style={{ textAlign: 'center', padding: '12px 8px', fontSize: 11, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', background: '#fafbfc' }}>Urgency</th>
@@ -232,7 +232,7 @@ const AIInsights = () => {
                     <tbody>
                         {filtered.length === 0 ? (
                             <tr>
-                                <td colSpan="6" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                                <td colSpan="5" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
                                     No products match the selected filters
                                 </td>
                             </tr>
@@ -286,33 +286,14 @@ const AIInsights = () => {
                                             <>
                                                 <span style={{ fontWeight: 600, fontSize: 14 }}>{p.avgDailyDemand}</span>
                                                 <span style={{ fontSize: 11, color: 'var(--text-muted)', display: 'block' }}>/ day</span>
+                                                <span style={{ fontSize: 9, color: '#94a3b8' }}>120-day avg</span>
                                             </>
                                         ) : (
                                             <span style={{ fontSize: 11, color: '#94a3b8', fontStyle: 'italic' }}>No sales data</span>
                                         )}
                                     </td>
 
-                                    {/* Days Until Stockout */}
-                                    <td style={{ textAlign: 'center', padding: '14px 8px' }}>
-                                        {p.daysUntilStockout === null ? (
-                                            <span style={{ fontSize: 12, color: '#94a3b8' }}>—</span>
-                                        ) : p.daysUntilStockout === 0 ? (
-                                            <span style={{
-                                                display: 'inline-block', padding: '2px 10px',
-                                                background: '#fef2f2', color: '#dc2626',
-                                                borderRadius: 999, fontSize: 11, fontWeight: 700
-                                            }}>Stockout</span>
-                                        ) : (
-                                            <span style={{
-                                                fontWeight: 700, fontSize: 15,
-                                                color: p.daysUntilStockout <= p.leadTimeDays ? '#dc2626'
-                                                    : p.daysUntilStockout <= p.leadTimeDays * 2 ? '#d97706'
-                                                        : '#16a34a'
-                                            }}>
-                                                {p.daysUntilStockout === 999 ? '999+ d' : `${p.daysUntilStockout}d`}
-                                            </span>
-                                        )}
-                                    </td>
+
 
 
 
