@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { DollarSign, Package, AlertTriangle, ShoppingBag } from 'lucide-react';
+import { IndianRupee, Package, AlertTriangle, ShoppingBag } from 'lucide-react';
 
 const StatCard = ({ title, value, icon: Icon, color, loading }) => (
     <div className="card">
@@ -42,16 +42,18 @@ const Dashboard = () => {
     // Calculate real stats
     const totalProducts = products.length;
     const totalInventoryValue = products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
-    const lowStockCount = products.filter(p => p.quantity < p.reorderLevel).length;
+    const criticalCount = products.filter(p => p.quantity < 5).length;
     const pendingOrders = orders.filter(o => o.status === 'Pending').length;
     const totalRevenue = orders
         .filter(o => o.status !== 'Cancelled')
         .reduce((sum, o) => sum + o.totalAmount, 0);
 
     const formatCurrency = (val) => {
-        if (val >= 1000000) return `$${(val / 1000000).toFixed(1)}M`;
-        if (val >= 1000) return `$${(val / 1000).toFixed(1)}K`;
-        return `$${val.toFixed(0)}`;
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 0
+        }).format(val);
     };
 
     // Calculate weekly sales from actual order data
@@ -95,7 +97,7 @@ const Dashboard = () => {
                 <StatCard
                     title="Total Revenue"
                     value={formatCurrency(totalRevenue)}
-                    icon={DollarSign}
+                    icon={IndianRupee}
                     color="blue"
                     loading={loading}
                 />
@@ -107,8 +109,8 @@ const Dashboard = () => {
                     loading={loading}
                 />
                 <StatCard
-                    title="Low Stock Items"
-                    value={lowStockCount}
+                    title="Critical Items"
+                    value={criticalCount}
                     icon={AlertTriangle}
                     color="yellow"
                     loading={loading}
@@ -165,7 +167,7 @@ const Dashboard = () => {
                                             <p className="text-xs text-muted">{order.items.length} item(s) • {order.status}</p>
                                         </div>
                                     </div>
-                                    <span className="text-sm font-semibold">${order.totalAmount.toFixed(2)}</span>
+                                    <span className="text-sm font-semibold">₹{order.totalAmount.toFixed(2)}</span>
                                 </div>
                             ))}
                         </div>
