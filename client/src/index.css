@@ -686,6 +686,8 @@ tr:hover td {
 }
 
 .product-card {
+  display: flex;
+  flex-direction: column;
   text-align: center;
   transition: all 0.15s ease;
 }

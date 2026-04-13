@@ -193,7 +193,7 @@ const Shop = () => {
                                 <span className="text-xs text-muted">{product.quantity} {product.unit} left</span>
                             </div>
                             <button
-                                className="btn btn-primary w-full"
+                                className="btn btn-primary w-full mt-auto"
                                 onClick={() => addToCart(product)}
                             >
                                 <Plus size={16} />
