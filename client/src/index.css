@@ -879,7 +879,53 @@ textarea.input {
 .badge-critical {
   background: #fee2e2;
   color: #dc2626;
+  box-shadow: 0 0 0 2px #fecaca;
   animation: pulse-critical 2s infinite;
+}
+
+.badge-limited {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  color: #92400e;
+  border: 1px solid #fde68a;
+  box-shadow: 0 2px 4px rgba(217, 119, 6, 0.1);
+  font-weight: 600;
+}
+
+.limited-stock-section {
+  background: linear-gradient(134deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 250, 235, 0.4) 100%);
+  border: 1px solid rgba(253, 230, 138, 0.3);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.limited-stock-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #fbbf24, #f59e0b);
+}
+
+.limited-stock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+
+.limited-stock-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 1.5rem;
 }
 
 @keyframes pulse-critical {

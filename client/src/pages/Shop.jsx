@@ -146,6 +146,41 @@ const Shop = () => {
         setAddressErrors({});
     };
 
+    const filteredLimitedStock = products.filter(p => p.quantity > 0 && p.quantity < 10);
+
+    const ProductCard = ({ product, showBadge = false }) => (
+        <div key={product._id} className="card product-card">
+            {product.image ? (
+                <img src={product.image} alt={product.name} className="shop-product-image" />
+            ) : (
+                <div className="product-icon">
+                    <Package size={32} />
+                </div>
+            )}
+            <div className="flex items-center justify-between mb-1">
+                <h3 className="font-medium">{product.name}</h3>
+                {showBadge && (
+                    <span className="badge badge-limited">Only {product.quantity} left</span>
+                )}
+            </div>
+            <p className="text-xs text-muted mb-1 text-left">{product.category}</p>
+            {product.description && (
+                <p className="text-xs text-muted mb-2 truncate text-left">{product.description}</p>
+            )}
+            <div className="flex items-center justify-between mb-3">
+                <span className="text-lg font-semibold">₹{product.price}</span>
+                <span className="text-xs text-muted">{product.quantity} {product.unit} left</span>
+            </div>
+            <button
+                className="btn btn-primary w-full mt-auto"
+                onClick={() => addToCart(product)}
+            >
+                <Plus size={16} />
+                Add to Cart
+            </button>
+        </div>
+    );
+
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
@@ -167,41 +202,39 @@ const Shop = () => {
 
             {loading ? (
                 <div className="text-center text-muted py-12">Loading products...</div>
-            ) : products.length === 0 ? (
-                <div className="card text-center py-12">
-                    <Package size={40} className="mx-auto text-gray-300 mb-4" />
-                    <p className="text-muted">No products available</p>
-                </div>
             ) : (
-                <div className="product-grid">
-                    {products.map(product => (
-                        <div key={product._id} className="card product-card">
-                            {product.image ? (
-                                <img src={product.image} alt={product.name} className="shop-product-image" />
-                            ) : (
-                                <div className="product-icon">
-                                    <Package size={32} />
-                                </div>
-                            )}
-                            <h3 className="font-medium mb-1">{product.name}</h3>
-                            <p className="text-xs text-muted mb-1">{product.category}</p>
-                            {product.description && (
-                                <p className="text-xs text-muted mb-2 truncate">{product.description}</p>
-                            )}
-                            <div className="flex items-center justify-between mb-3">
-                                <span className="text-lg font-semibold">₹{product.price}</span>
-                                <span className="text-xs text-muted">{product.quantity} {product.unit} left</span>
+                <>
+                    {/* Limited Stock Section */}
+                    {filteredLimitedStock.length > 0 && (
+                        <div className="limited-stock-section">
+                            <h2 className="limited-stock-title">
+                                <span role="img" aria-label="fire">🔥</span> Limited Stock Items
+                            </h2>
+                            <div className="limited-stock-grid">
+                                {filteredLimitedStock.map(product => (
+                                    <ProductCard key={product._id} product={product} showBadge={true} />
+                                ))}
                             </div>
-                            <button
-                                className="btn btn-primary w-full mt-auto"
-                                onClick={() => addToCart(product)}
-                            >
-                                <Plus size={16} />
-                                Add to Cart
-                            </button>
                         </div>
-                    ))}
-                </div>
+                    )}
+
+                    {/* All Products Section */}
+                    {products.length === 0 ? (
+                        <div className="card text-center py-12">
+                            <Package size={40} className="mx-auto text-gray-300 mb-4" />
+                            <p className="text-muted">No products available</p>
+                        </div>
+                    ) : (
+                        <div>
+                            <h2 className="text-lg mb-4">All Products</h2>
+                            <div className="product-grid">
+                                {products.map(product => (
+                                    <ProductCard key={product._id} product={product} />
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </>
             )}
 
             {/* Cart Sidebar */}
